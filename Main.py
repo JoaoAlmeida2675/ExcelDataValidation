@@ -14,7 +14,7 @@ def obter_indice_coluna_da_letra(letra):
     return indice_coluna
 
 # Caminho para o arquivo Excel
-caminho_arquivo_excel = r'C:\Users\jalmeida26\OneDrive - DXC Production\Desktop\Projeto ValidacaoDados\WorkFile.xlsx'
+caminho_arquivo_excel = r'your\file\path\File.xlsx'
 
 # Carregar o arquivo Excel
 try:
@@ -57,7 +57,7 @@ for letra_coluna in colunas_a_verificar:
             mensagens_colunas_vazias.append(mensagem)
 
 # Criar o arquivo .txt com as mensagens das colunas vazias
-caminho_arquivo_txt = r'C:\Users\jalmeida26\OneDrive - DXC Production\Desktop\DadosEmFaltaExcel.txt'
+caminho_arquivo_txt = r'your\save\path\File.txt'
 with open(caminho_arquivo_txt, 'w') as arquivo_txt:
     for mensagem in mensagens_colunas_vazias:
         arquivo_txt.write(mensagem + '\n')
