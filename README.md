@@ -53,17 +53,24 @@ Closes the Excel workbook, ensuring proper resource management after the validat
    - Specify the sheet name:
 
      ```python
-     sheet_name = "Devices"
+     sheet_name = "Your\\Sheet\\Name"
      ```
 
    - Define the range of columns to check, rows to check, and the row containing column names.
 
-3. Run the script:
+   - Set the .txt file path:
+
+     ```python
+     file_name = "Your\\Save\\Path\\File.txt"
+     ```
+     
+4. Run the script:
 
    ```bash
    python ValidateExcelData.py
    ```
 
-   Feel free to modify the script according to your specific Excel file and validation requirements.
 
-   Make sure to update the links, file names, and paths accordingly.
+Feel free to modify the script according to your specific Excel file and validation requirements.
+
+Make sure to update the links, file names, and paths accordingly.
