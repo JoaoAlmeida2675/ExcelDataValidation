@@ -1,99 +1,51 @@
-# Excel Automation Script
+# Python Script
+ValidateExcelData
 
-This PowerShell script automates the process of checking for blank or empty cells in a specified range of lines and columns in an Excel file.
+Note: Ensure that the openpyxl library is installed using `pip install openpyxl` before running the script.
 
-## 1. Function Get-ColumnIndexFromLetter:
+1. **Function `get_column_index_from_letter`:**
+   - **Objective:** This function converts a letter or set of letters to uppercase and calculates the corresponding column index, where A=1, B=2, etc.
+   - **Parameters:** Receives a string `letter`.
+   - **Process:**
+     - Converts the letter to uppercase.
+     - Initializes a string `alphabet` with the letters of the alphabet.
+     - Initializes `column_index` as zero.
+     - Iterates over each character in the provided letter.
+     - Calculates the corresponding index in the alphabet and updates `column_index` by multiplying it by 26 (number of letters in the alphabet) and adding the character index.
+   - **Result:** Returns the column index.
 
-### Objective:
-This function converts a letter or set of letters to uppercase and calculates the corresponding column index, where A=1, B=2, etc.
+2. **Function `inclusive_range`:**
+   - **Objective:** This function generates a range including the end value.
+   - **Parameters:** Receives `start` and `end`.
+   - **Process:** Returns a range from `start` to `end + 1`.
 
-### Parameters:
-Receives a string `$letter`.
+3. **Open Excel and Load the File:**
+   - **Objective:** Initiates an instance of Excel using openpyxl and opens an Excel workbook from the specified path.
+   - **Process:**
+     - Creates an instance of Excel using `openpyxl.load_workbook`.
+     - Checks if the workbook was opened successfully.
+     - Specifies the sheet name as `"Devices"`.
+     - Selects the sheet by name.
+     - Specifies the columns and rows to check.
+   - **Result:** `excel` contains the Excel instance, and `sheet` contains the selected sheet.
 
-### Process:
-- Converts the letter to uppercase to ensure consistency.
-- Initializes a string `$alphabet` with the letters of the alphabet.
-- Initializes `$columnIndex` as zero.
-- Iterates over each character in the provided letter.
-- Calculates the corresponding index in the alphabet and updates `$columnIndex` by multiplying it by 26 (number of letters in the alphabet) and adding the character index.
+4. **Check Empty Cells:**
+   - **Objective:** Iterates over the specified columns and rows to check if the cells are empty.
+   - **Process:**
+     - Initializes a list to store empty column names.
+     - Loops through specified columns and rows.
+     - Checks for null values and adds messages to the list for empty columns.
+   - **Result:** A list `empty_column_names` contains messages for empty columns.
 
-### Result:
-Returns the column index.
+5. **Create the .txt File with Messages for Empty Columns:**
+   - **Objective:** Creates a text file with messages for empty columns.
+   - **Process:**
+     - Specifies the path of the text file.
+     - Uses `open` and `write` to create the file and write messages to it.
+   - **Result:** A text file, "MissingDataExcel.txt," is created with messages for empty columns.
 
-## 2. Open and Load Excel File:
-
-### Objective:
-Initiates an instance of Excel, makes it visible, and opens an Excel workbook from the specified path.
-
-### Process:
-- Creates an instance of Excel using `$excel = New-Object -ComObject Excel.Application`.
-- Makes Excel visible (optional and can be adjusted) using `$excel.Visible = $true`.
-- Opens an Excel workbook at the specified path with `$workbook = $excel.Workbooks.Open("your\path\here\File.xlsx")`.
-
-### Result:
-`$excel` contains the Excel instance, and `$workbook` contains the opened workbook.
-
-## 3. Select Sheet and Specify Columns to Check:
-
-### Objective:
-Selects a specific sheet in the workbook and specifies a set of columns to be checked.
-
-### Process:
-- Sets the sheet name as "your_sheet_name".
-- Selects the sheet with the specified name using `$sheet = $workbook.Sheets.Item($sheetName)`.
-- Specifies a set of columns to be checked in `$columnsToCheck`.
-
-### Result:
-`$sheet` contains the selected sheet, and `$columnsToCheck` contains the columns to be checked.
-
-## 4. Check Empty Cells:
-
-### Objective:
-Iterates over the specified columns and rows to check if the cells are empty.
-
-### Process:
-- Initializes lists to store empty column names and messages for empty columns.
-- Iterates over each specified column letter.
-- Obtains the column index using the `Get-ColumnIndexFromLetter` function.
-- If the column index is zero, displays a message for an invalid column.
-- Gets the column name in the specified names row.
-- Iterates over the rows to check.
-- If the cell value is null, adds a message to the list of empty column messages.
-
-### Result:
-`$emptyColumnMessages` contains the messages for empty columns.
-
-## 5. Create the .txt file with messages for empty columns:
-
-### Objective:
-Creates a text file with messages for empty columns.
-
-### Process:
-- Specifies the path of the text file.
-- Uses `Out-File` to write the messages to the file.
-
-### Result:
-A text file is created with messages for empty columns.
-
-## 6. Close Excel and Release Resources:
-
-### Objective:
-Closes the workbook and Excel, releasing resources associated with the Excel objects.
-
-### Process:
-- Closes the workbook and Excel using `$workbook.Close()` and `$excel.Quit()`.
-- Releases resources associated with the Excel objects using `[System.Runtime.InteropServices.Marshal]::ReleaseComObject($workbook) | Out-Null` and similar lines.
-
-### Result:
-Resources are released.
-
-## 7. Remove COM Object References:
-
-### Objective:
-Removes variables storing references to COM objects to further release resources.
-
-### Process:
-- Removes the variables `$sheet`, `$workbook`, and `$excel`.
-
-### Result:
-Releases the variables, removing references to COM objects.
+6. **Close Excel:**
+   - **Objective:** Closes the workbook and releases resources associated with the Excel objects.
+   - **Process:**
+     - Closes the workbook and Excel instance.
+   - **Result:** Resources are released.
