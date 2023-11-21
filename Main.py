@@ -1,66 +1,77 @@
 import openpyxl
 
-# Função para obter o índice da coluna a partir da letra da coluna (A=1, B=2, etc.)
-def obter_indice_coluna_da_letra(letra):
-    letra = letra.upper()
-    alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    indice_coluna = 0
+# Function to get the column index from the column letter (A=1, B=2, etc.) - supports columns with multiple letters (e.g., AA, AB)
+def get_column_index_from_letter(letter):
+    letter = letter.upper()
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    column_index = 0
 
-    for i in range(len(letra)):
-        caracter = letra[i]
-        indice_caracter = alfabeto.index(caracter) + 1
-        indice_coluna = indice_coluna * 26 + indice_caracter
+    for char in letter:
+        char_index = alphabet.index(char) + 1
+        column_index = column_index * 26 + char_index
 
-    return indice_coluna
+    return column_index
 
-# Caminho para o arquivo Excel
-caminho_arquivo_excel = r'your\file\path\File.xlsx'
+# Function to generate a range including the end value
+def inclusive_range(start, end):
+    return range(start, end + 1)
 
-# Carregar o arquivo Excel
-try:
-    workbook = openpyxl.load_workbook(caminho_arquivo_excel)
-    sheet = workbook['Devices']  # Nome da folha
-except Exception as e:
-    print(f'Erro ao abrir o arquivo Excel: {e}')
-    exit()
+# Open Excel and load the file
+excel = openpyxl.load_workbook("your\path\to\File.xlsx")
+if excel is None:
+    print("Failed to open the workbook.")
+else:
+    # Specify the sheet name
+    sheet_name = "your\sheet\name"
 
-# Especificar as colunas a verificar (com base nas letras das colunas)
-colunas_a_verificar = ["B", "C", "D", "H", "I", "L", "M", "N", "O", "Q", "R", "T", "U", "Y", "Z", "AA", "AD", "AH", "AI", "AJ", "AK", "AM", "AN", "AO"]
+    # Select the sheet by name
+    sheet = excel[sheet_name]
 
-# Especificar as linhas a verificar
-linhas_a_verificar = range(6, 10)  # Exemplo: Verificar linhas de 6 a 10 = 6, 10
+    if sheet is None:
+        print("Failed to select the worksheet.")
+    else:
+        # Specify the columns to check (based on column letters)
+        columns_to_check = ["B", "C", "D", "H", "I", "L", "M", "N", "O", "Q", "R", "T", "U", "Y", "Z", "AA", "AD", "AH", "AI", "AJ", "AK", "AM", "AN", "AO"]
 
-# Especificar a linha com os nomes
-linha_com_nomes = 1  # Atualizar com o número da linha que contém os nomes das colunas
+        # Specify the rows to check
+        rows_to_check = list(inclusive_range(6, 10))  # Check rows from 6 to 10 (including 10)
 
-# Inicializar uma lista para armazenar as mensagens das colunas vazias
-mensagens_colunas_vazias = []
+        # Specify the row with names
+        row_with_names = 1  # Update with the actual row number containing column names
 
-# Percorrer colunas e linhas e obter o nome da coluna na linha especificada
-for letra_coluna in colunas_a_verificar:
-    indice_coluna = obter_indice_coluna_da_letra(letra_coluna)
+        # Initialize a list to store the names of empty columns
+        empty_column_names = []
 
-    if indice_coluna == 0:
-        print(f'Letra de coluna inválida: {letra_coluna}')
-        continue
+        # Loop through columns and rows and get the column name at the specified row
+        for column_letter in columns_to_check:
+            column_index = get_column_index_from_letter(column_letter)
 
-    # Obter o nome da coluna
-    nome_coluna = sheet.cell(row=linha_com_nomes, column=indice_coluna).value
+            if column_index == 0:
+                print(f"Invalid column letter: {column_letter}")
+                continue
 
-    # Percorrer linhas e verificar dados em falta
-    for linha in linhas_a_verificar:
-        valor_celula = sheet.cell(row=linha, column=indice_coluna).value
+            # Get the cell at the specified row and column
+            cell = sheet.cell(row=row_with_names, column=column_index)
 
-        if valor_celula is None:
-            mensagem = f'Linha: {linha} - Dados em falta na Coluna: {nome_coluna}'
-            print(mensagem)
-            mensagens_colunas_vazias.append(mensagem)
+            # Check for null values when accessing the cell
+            if cell.value is None:
+                column_name = "N/A"  # or any default value
+            else:
+                column_name = cell.value
 
-# Criar o arquivo .txt com as mensagens das colunas vazias
-caminho_arquivo_txt = r'your\save\path\File.txt'
-with open(caminho_arquivo_txt, 'w') as arquivo_txt:
-    for mensagem in mensagens_colunas_vazias:
-        arquivo_txt.write(mensagem + '\n')
+            # Loop through rows and check for missing data
+            for row in rows_to_check:
+                cell_value = sheet.cell(row=row, column=column_index).value
 
-# Fechar o arquivo Excel
-workbook.close()
+                if cell_value is None:
+                    message = f"Row: {row} - Missing Data in Column: {column_name}"
+                    print(message)
+                    empty_column_names.append(message)
+
+        # Create the .txt file with messages of empty columns
+        file_name = "your\save\path\file\name.txt"
+        with open(file_name, "w") as file:
+            file.write("\n".join(empty_column_names))
+
+        # Close Excel
+        excel.close()
