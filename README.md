@@ -67,4 +67,3 @@ Closes the Excel workbook, ensuring proper resource management after the validat
    Feel free to modify the script according to your specific Excel file and validation requirements.
 
    Make sure to update the links, file names, and paths accordingly.
-```
