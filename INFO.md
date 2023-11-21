@@ -24,7 +24,7 @@ Note: Ensure that the openpyxl library is installed using `pip install openpyxl`
    - **Process:**
      - Creates an instance of Excel using `openpyxl.load_workbook`.
      - Checks if the workbook was opened successfully.
-     - Specifies the sheet name as `"Devices"`.
+     - Specifies the sheet name as `"your\sheet\name"`.
      - Selects the sheet by name.
      - Specifies the columns and rows to check.
    - **Result:** `excel` contains the Excel instance, and `sheet` contains the selected sheet.
