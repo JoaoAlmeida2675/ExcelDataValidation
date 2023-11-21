@@ -1,3 +1,5 @@
+![GitHub repo size](https://img.shields.io/github/repo-size/JoaoAlmeida2675/ExcelDataValidation)
+
 # Excel Data Validation Automation
 
 Automate the validation of Excel data by checking for blank or empty cells in a specified range of lines and columns using Python with the openpyxl library. This script streamlines the process, making it efficient and easy to identify and manage empty cells in your Excel files.
